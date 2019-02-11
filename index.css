@@ -52,8 +52,13 @@ body, html{
 
 .sprite-container{
 	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
 }
 
+.sprite{
+	width: 100%;
+}
 /*Media Queries*/
 @media screen and (max-width: 1024px){
   .landing-image {

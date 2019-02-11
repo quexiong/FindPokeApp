@@ -1,5 +1,7 @@
 'use strict';
 
+// FOR REFERENCE: http://www.pokeapi-how.appspot.com/page1
+
 const URL = 'https://pokeapi.co/api/v2/pokemon/';
 const min = 1;
 const max = 721;
@@ -11,6 +13,7 @@ let fetched_data = [];
 //Once the user clicks on the start button, clear the landing page and show the game board to the user.
 function start_Game(){
 	$('.start-btn-container').on('click', '.start-btn', function(event){
+		event.preventDefault();
 		$('.content-container').css('display', 'none');
 		$('.main-game-container').css('display', 'block');
 		populate_ID_Array();
@@ -21,11 +24,11 @@ function start_Game(){
 
 function generate_Random_Number(min, max){
 	random_generated_id = Math.floor(Math.random() * (max-min) + min);
-	generated_ids.push(random_generated_id);
+	generated_ids.push(random_generated_id); 
 }
 
 function populate_ID_Array(){
-	for(let i = 0; i < 20; i ++){
+	for(let i = 0; i < 100; i ++){
 		generate_Random_Number(min, max);
 	};
 }
@@ -35,11 +38,18 @@ function populate_ID_Array(){
 function fetch_Pokemon_Data(array, url){
 	for(let i = 0; i < array.length; i ++){
 		let final_Url = url + array[i];
-		console.log(final_Url);
-		$.ajax({url: "final_Url", success: function(data){
-			console.log(data.name);
-		}})
+		$.getJSON(final_Url, function(data){
+			let name = data.name;
+			fetched_data.push(name);
+			let sprite_url = data.sprites.front_default;
+			$('.sprite-container').append(populate_Game_Board(sprite_url, name)); 
+		});
 	};
+	console.log(fetched_data);	
+}
+
+function populate_Game_Board(image_Url, name){
+	return '<div class="single-sprite-container"> <input type="image" class="image-btn" id="' + name + '" src="' + image_Url + '" alt="pokemon sprite button"> </div>'
 }
 
 function start_New_Game(){
