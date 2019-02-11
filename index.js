@@ -1,6 +1,6 @@
 'use strict';
 
-const URL = 'http://pokeapi.salestock.net/api/v2';
+const URL = 'https://pokeapi.co/api/v2/pokemon/';
 const min = 1;
 const max = 721;
 
@@ -37,7 +37,7 @@ function fetch_Pokemon_Data(array, url){
 		let final_Url = url + array[i];
 		console.log(final_Url);
 		$.ajax({url: "final_Url", success: function(data){
-			console.log(data);
+			console.log(data.name);
 		}})
 	};
 }
