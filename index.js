@@ -1,6 +1,6 @@
 'use strict';
 
-const URL = 'https://pokeapi.co/api/v2/pokemon/';
+const URL = 'http://pokeapi.salestock.net/api/v2';
 const min = 1;
 const max = 721;
 
