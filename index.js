@@ -16,19 +16,34 @@ function start_Game(){
 		event.preventDefault();
 		$('.content-container').css('display', 'none');
 		$('.main-game-container').css('display', 'block');
+		generate_Random_Number(min, max);
+		console.log(random_generated_id);
 		populate_ID_Array();
-		console.log(generated_ids);
 		fetch_Pokemon_Data(generated_ids, URL);
 	});
 }
 
 function generate_Random_Number(min, max){
 	random_generated_id = Math.floor(Math.random() * (max-min) + min);
-	generated_ids.push(random_generated_id); 
+	// console.log(random_generated_id);
+	function check_For_Duplicates(array, number){
+		for(let i = 0; i < array.length; i ++){
+			if((array[i] == number)){
+				break;
+			}
+			else{
+				array.push(number);
+			}
+		}
+	}
+	check_For_Duplicates(generated_ids, random_generated_id);
+	console.log(generated_ids);
+	// generated_ids.push(random_generated_id); 
 }
 
 function populate_ID_Array(){
-	for(let i = 0; i < 100; i ++){
+	// console.log(random_generated_id);
+	for(let i = 0; i < 130; i ++){
 		generate_Random_Number(min, max);
 	};
 }
@@ -39,17 +54,19 @@ function fetch_Pokemon_Data(array, url){
 	for(let i = 0; i < array.length; i ++){
 		let final_Url = url + array[i];
 		$.getJSON(final_Url, function(data){
+			// console.log(data);
+			let id = data.id;
 			let name = data.name;
 			fetched_data.push(name);
 			let sprite_url = data.sprites.front_default;
-			$('.sprite-container').append(populate_Game_Board(sprite_url, name)); 
+			$('.sprite-container').append(populate_Game_Board(sprite_url, name, id)); 
 		});
 	};
-	console.log(fetched_data);	
+	// console.log(fetched_data);	
 }
 
-function populate_Game_Board(image_Url, name){
-	return '<div class="single-sprite-container"> <input type="image" class="image-btn" id="' + name + '" src="' + image_Url + '" alt="pokemon sprite button"> </div>'
+function populate_Game_Board(image_Url, name, id){
+	return '<div class="single-sprite-container"> <input type="image" class="image-btn" id="' + id + '" name="' + name + '"src="' + image_Url + '" alt="pokemon sprite button"> </div>'
 }
 
 function start_New_Game(){
