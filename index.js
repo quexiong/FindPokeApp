@@ -9,20 +9,33 @@ const max = 721;
 let random_generated_id; // generate a random number from 1-721, assign it to this variable
 let generated_ids = []; // create an empty array, we will store the pokemons that we encountered already in this array, we have to try to prevent duplicates somehow
 let unique_ids = [];
-let fetched_data = [];
+let fetched_ids = []; // store the ids of fetched data
+let fetched_names = []; // store the names of fetched data
+let randomly_selected_name; // randomly select 1 index/id/name from array of fetched pokemon 
 
 //Once the user clicks on the start button, clear the landing page and show the game board to the user.
 function start_Game(){
 	$('.start-btn-container').on('click', '.start-btn', function(event){
 		event.preventDefault();
 		$('.content-container').css('display', 'none');
-		$('.main-game-container').css('display', 'block');
+		$('.go-container').css('display', 'block');
+		// $('.main-game-container').css('display', 'block');
 		generate_Random_Number(min, max);
 		populate_ID_Array();
-		console.log(generated_ids);
-		remove_duplicates(generated_ids);
-		fetch_Pokemon_Data(unique_ids, URL);
+		remove_Duplicates(generated_ids);
+		fetch_Pokemon_Data(unique_ids, URL);	
 	});
+}
+
+function show_Game_Board(){
+	$('.go-btn-container').on('click', '.go-btn', function(event){
+		event.preventDefault();
+		$('.go-container').css('display', 'none');
+		$('.main-game-container').css('display', 'block');
+		console.log(fetched_names.length);
+		select_Random_Name(fetched_names);
+		console.log(randomly_selected_name);
+	})
 }
 
 function generate_Random_Number(min, max){
@@ -30,32 +43,32 @@ function generate_Random_Number(min, max){
 	generated_ids.push(random_generated_id);
 }
 
+function select_Random_Name(array){
+	randomly_selected_name = array[Math.floor(Math.random() * array.length)]
+}
+
 function populate_ID_Array(){
 	for(let i = 0; i < 180; i ++){
 		generate_Random_Number(min, max);
-		// console.log(random_generated_id);
 	};
 }
 
-function remove_duplicates(array){
+function remove_Duplicates(array){
 	unique_ids = [...new Set(array)];
-	console.log(unique_ids);
 }
 
-//Make the API call to the PokeAPI.
-//Populate a flexbox with a random selection of pokemons.
 function fetch_Pokemon_Data(array, url){
 	for(let i = 0; i < array.length; i ++){
 		let final_Url = url + array[i];
 		$.getJSON(final_Url, function(data){
 			let id = data.id;
 			let name = data.name;
-			fetched_data.push(name);
+			fetched_ids.push(id);
+			fetched_names.push(name);
 			let sprite_url = data.sprites.front_default;
 			$('.sprite-container').append(populate_Game_Board(sprite_url, name, id)); 
-		});
+		}).done(console.log('done'));
 	};
-	// console.log(fetched_data);	
 }
 
 function populate_Game_Board(image_Url, name, id){
@@ -64,6 +77,7 @@ function populate_Game_Board(image_Url, name, id){
 
 function start_New_Game(){
 	start_Game();
+	show_Game_Board();
 }
 
 $(start_New_Game);

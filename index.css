@@ -57,7 +57,17 @@ body, html{
 }
 
 .image-btn{
-	
+
+}
+
+.go-container{
+	display: none;
+	text-align: center;
+}
+
+.go-btn{
+	width: 50%;
+	height: 50%;
 }
 
 /*Media Queries*/
