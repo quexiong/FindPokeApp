@@ -56,9 +56,10 @@ body, html{
 	flex-wrap: wrap;
 }
 
-.sprite{
-	width: 100%;
+.image-btn{
+	
 }
+
 /*Media Queries*/
 @media screen and (max-width: 1024px){
   .landing-image {

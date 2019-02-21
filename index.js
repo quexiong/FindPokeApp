@@ -8,6 +8,7 @@ const max = 721;
 
 let random_generated_id; // generate a random number from 1-721, assign it to this variable
 let generated_ids = []; // create an empty array, we will store the pokemons that we encountered already in this array, we have to try to prevent duplicates somehow
+let unique_ids = [];
 let fetched_data = [];
 
 //Once the user clicks on the start button, clear the landing page and show the game board to the user.
@@ -17,35 +18,28 @@ function start_Game(){
 		$('.content-container').css('display', 'none');
 		$('.main-game-container').css('display', 'block');
 		generate_Random_Number(min, max);
-		console.log(random_generated_id);
 		populate_ID_Array();
-		fetch_Pokemon_Data(generated_ids, URL);
+		console.log(generated_ids);
+		remove_duplicates(generated_ids);
+		fetch_Pokemon_Data(unique_ids, URL);
 	});
 }
 
 function generate_Random_Number(min, max){
 	random_generated_id = Math.floor(Math.random() * (max-min) + min);
-	// console.log(random_generated_id);
-	function check_For_Duplicates(array, number){
-		for(let i = 0; i < array.length; i ++){
-			if((array[i] == number)){
-				break;
-			}
-			else{
-				array.push(number);
-			}
-		}
-	}
-	check_For_Duplicates(generated_ids, random_generated_id);
-	console.log(generated_ids);
-	generated_ids.push(random_generated_id); 
+	generated_ids.push(random_generated_id);
 }
 
 function populate_ID_Array(){
-	// console.log(random_generated_id);
-	for(let i = 0; i < 130; i ++){
+	for(let i = 0; i < 180; i ++){
 		generate_Random_Number(min, max);
+		// console.log(random_generated_id);
 	};
+}
+
+function remove_duplicates(array){
+	unique_ids = [...new Set(array)];
+	console.log(unique_ids);
 }
 
 //Make the API call to the PokeAPI.
@@ -54,7 +48,6 @@ function fetch_Pokemon_Data(array, url){
 	for(let i = 0; i < array.length; i ++){
 		let final_Url = url + array[i];
 		$.getJSON(final_Url, function(data){
-			// console.log(data);
 			let id = data.id;
 			let name = data.name;
 			fetched_data.push(name);
