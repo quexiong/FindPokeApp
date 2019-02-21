@@ -38,7 +38,7 @@ function generate_Random_Number(min, max){
 	}
 	check_For_Duplicates(generated_ids, random_generated_id);
 	console.log(generated_ids);
-	// generated_ids.push(random_generated_id); 
+	generated_ids.push(random_generated_id); 
 }
 
 function populate_ID_Array(){
