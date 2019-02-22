@@ -70,6 +70,22 @@ body, html{
 	height: 50%;
 }
 
+.header-container{
+	text-align: center;
+	margin: 10px;
+	margin-bottom: 20px;
+}
+
+.answer-container{
+	text-align: center;
+	margin-bottom: 20px
+}
+
+#answer{
+	text-transform: uppercase;
+	color: red;
+}
+
 /*Media Queries*/
 @media screen and (max-width: 1024px){
   .landing-image {

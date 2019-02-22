@@ -9,7 +9,7 @@ const max = 721;
 let random_generated_id; // generate a random number from 1-721, assign it to this variable
 let generated_ids = []; // create an empty array, we will store the pokemons that we encountered already in this array, we have to try to prevent duplicates somehow
 let unique_ids = [];
-let fetched_ids = []; // store the ids of fetched data
+let fetched_ids = []; // store the ids of fetched data, i may not actually need to use this
 let fetched_names = []; // store the names of fetched data
 let randomly_selected_name; // randomly select 1 index/id/name from array of fetched pokemon 
 
@@ -35,6 +35,7 @@ function show_Game_Board(){
 		console.log(fetched_names.length);
 		select_Random_Name(fetched_names);
 		console.log(randomly_selected_name);
+		$('.answer-container').append(append_Pokemon_Name(randomly_selected_name));
 	})
 }
 
@@ -67,17 +68,29 @@ function fetch_Pokemon_Data(array, url){
 			fetched_names.push(name);
 			let sprite_url = data.sprites.front_default;
 			$('.sprite-container').append(populate_Game_Board(sprite_url, name, id)); 
-		}).done(console.log('done'));
+		});
 	};
 }
 
 function populate_Game_Board(image_Url, name, id){
-	return '<div class="single-sprite-container"> <input type="image" class="image-btn" id="' + id + '" name="' + name + '"src="' + image_Url + '" alt="pokemon sprite button"> </div>'
+	return '<div class="single-sprite-container"> <input type="image" class="image-btn" id="' + name + '" name="' + name + '"src="' + image_Url + '" alt="pokemon sprite button" value="' + name + '"> </div>'
+}
+
+function append_Pokemon_Name(name){
+	return '<h3>Find <span id="answer">' + name + '</span></h3>'
+}
+
+function guess_Pokemon(){
+	$('sprite-container').on('click', 'image-btn', (function(event){
+		event.preventDefault();
+		console.log('clicked');
+	}))
 }
 
 function start_New_Game(){
 	start_Game();
 	show_Game_Board();
+	guess_Pokemon();
 }
 
 $(start_New_Game);
