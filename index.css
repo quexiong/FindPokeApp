@@ -60,16 +60,6 @@ body, html{
 
 }
 
-.go-container{
-	display: none;
-	text-align: center;
-}
-
-.go-btn{
-	width: 50%;
-	height: 50%;
-}
-
 .header-container{
 	text-align: center;
 	margin: 10px;

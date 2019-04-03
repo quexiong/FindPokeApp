@@ -6,6 +6,8 @@ const URL = 'https://pokeapi.co/api/v2/pokemon/';
 const min = 1;
 const max = 721;
 
+let score = 0;
+let question = 0;
 let random_generated_id; // generate a random number from 1-721, assign it to this variable
 let generated_ids = []; // create an empty array, we will store the pokemons that we encountered already in this array, we have to try to prevent duplicates somehow
 let unique_ids = [];
@@ -13,30 +15,18 @@ let fetched_ids = []; // store the ids of fetched data, i may not actually need 
 let fetched_names = []; // store the names of fetched data
 let randomly_selected_name; // randomly select 1 index/id/name from array of fetched pokemon 
 
-//Once the user clicks on the start button, clear the landing page and show the game board to the user.
+// Once the user clicks on the start button, clear the landing page and show the game board to the user.
 function start_Game(){
-	$('.start-btn-container').on('click', '.start-btn', function(event){
+	$('.start-btn').on('click', function(event){
 		event.preventDefault();
+		console.log('clicked');
 		$('.content-container').css('display', 'none');
-		$('.go-container').css('display', 'block');
-		// $('.main-game-container').css('display', 'block');
-		generate_Random_Number(min, max);
-		populate_ID_Array();
-		remove_Duplicates(generated_ids);
-		fetch_Pokemon_Data(unique_ids, URL);	
-	});
-}
-
-function show_Game_Board(){
-	$('.go-btn-container').on('click', '.go-btn', function(event){
-		event.preventDefault();
-		$('.go-container').css('display', 'none');
 		$('.main-game-container').css('display', 'block');
 		console.log(fetched_names.length);
-		select_Random_Name(fetched_names);
-		console.log(randomly_selected_name);
-		$('.answer-container').append(append_Pokemon_Name(randomly_selected_name));
-	})
+ 		select_Random_Name(fetched_names);
+ 		console.log(randomly_selected_name);
+ 		$('.answer-container').append(append_Pokemon_Name(randomly_selected_name));
+	});
 }
 
 function generate_Random_Number(min, max){
@@ -67,30 +57,59 @@ function fetch_Pokemon_Data(array, url){
 			fetched_ids.push(id);
 			fetched_names.push(name);
 			let sprite_url = data.sprites.front_default;
-			$('.sprite-container').append(populate_Game_Board(sprite_url, name, id)); 
+			$('.sprite-container').append(populate_Game_Board(sprite_url, name, id));
 		});
 	};
 }
 
 function populate_Game_Board(image_Url, name, id){
-	return '<div class="single-sprite-container"> <input type="image" class="image-btn" id="' + name + '" name="' + name + '"src="' + image_Url + '" alt="pokemon sprite button" value="' + name + '"> </div>'
+	return '<input type="image" class="image-btn" id="' + name + '" value="' + name + '"src="' + image_Url + '" alt="pokemon sprite button" value="' + name + '">'
 }
 
 function append_Pokemon_Name(name){
 	return '<h3>Find <span id="answer">' + name + '</span></h3>'
 }
 
-function guess_Pokemon(){
-	$('sprite-container').on('click', 'image-btn', (function(event){
-		event.preventDefault();
-		console.log('clicked');
-	}))
+function check_User_Answer(guess, name){
+	if(guess == name){
+		score++;
+		question++;
+		console.log(score);
+		alert('Correct!');
+	}
+	else{
+		alert('Wrong!');
+	}
 }
+function clear_Data(){
+	$('.sprite-container').empty();
+		
+}
+
+function next_Pokemon(){
+
+	generate_Random_Number(min, max);
+	populate_ID_Array();
+	remove_Duplicates(generated_ids);
+	fetch_Pokemon_Data(unique_ids, URL);
+}
+
+// Make the API call and populate the board when page loads, remove the need to wait for API call to finish
+$(document).ready(function(){
+	generate_Random_Number(min, max);
+	populate_ID_Array();
+	remove_Duplicates(generated_ids);
+	fetch_Pokemon_Data(unique_ids, URL);
+})
+
+// Add event listener to the future buttons
+$(document).on('click', '.image-btn', function(e){
+	let guess = $(this).val();
+	check_User_Answer(guess, randomly_selected_name);
+})
 
 function start_New_Game(){
 	start_Game();
-	show_Game_Board();
-	guess_Pokemon();
 }
 
 $(start_New_Game);
