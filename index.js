@@ -9,6 +9,7 @@ const max = 721;
 let score = 0;
 let startTime = 0;
 let endTime = 0;
+let time = 0;
 let totalTime = 0;
 
 let random_generated_id; // generate a random number from 1-721, assign it to this variable
@@ -17,6 +18,7 @@ let unique_ids = [];
 let fetched_ids = []; // store the ids of fetched data, i may not actually need to use this
 let fetched_names = []; // store the names of fetched data
 let randomly_selected_name; // randomly select 1 index/id/name from array of fetched pokemon 
+let random_name_temp = '';
 
 function startTimer(){
 	startTime = new Date();
@@ -26,7 +28,7 @@ function endTimer(){
 	endTime = new Date();
 	let difference = endTime - startTime;
 	difference /= 1000;
-	let time = Math.round(difference);
+	time = Math.round(difference);
 	totalTime += time;
 	console.log(time + ' seconds');
 	console.log('total time: ' + totalTime + ' seconds');
@@ -45,7 +47,6 @@ function start_Game(){
 function next_Button(){
 	$('.next-btn').on('click', function(event){
 		event.preventDefault();
-		console.log('clicked');
 		$('.next-container').css('display', 'none');
 		$('.sprite-container').css('display', 'block');
  		select_Random_Name(fetched_names);
@@ -60,11 +61,12 @@ function generate_Random_Number(min, max){
 
 function select_Random_Name(array){
 	randomly_selected_name = array[Math.floor(Math.random() * array.length)];
+	random_name_temp = randomly_selected_name;
 	$('.answer-container').append(append_Pokemon_Name(randomly_selected_name));
 }
 
 function populate_ID_Array(){
-	for(let i = 0; i < 100; i ++){
+	for(let i = 0; i < 150; i ++){
 		generate_Random_Number(min, max);
 	};
 }
@@ -92,16 +94,26 @@ function populate_Game_Board(image_Url, name, id){
 }
 
 function append_Pokemon_Name(name){
-	return '<h3>Find <span id="answer">' + name + '</span></h3>'
+	return '<h3>Find: <span id="answer">' + name + '</span></h3>'
+}
+
+function append_Stats(){
+	return '<h3>It took you ' + time + ' seconds to find that Pokémon.</h3>' + '<br> <h3> So far you have found ' + score + ' Pokémon in ' + totalTime + ' seconds.</h3>'
+}
+
+function show_Stats(){
+	$('.stats').append(append_Stats());
+	$('.sprite-container').css('display', 'none');
+	$('.next-container').css('display', 'block');
 }
 
 function check_User_Answer(guess, name){
 	if(guess == name){
 		score++;
 		console.log(score);
-		clear_Data();
 		next_Pokemon();
 		endTimer();
+		show_Stats();
 	}
 	else{
 		alert('Wrong Pokemon!');
@@ -111,25 +123,18 @@ function check_User_Answer(guess, name){
 function clear_Data(){
 	$('.sprite-container').empty();
 	$('.answer-container').empty();
+	$('.stats').empty();
 	random_generated_id = '';
 	randomly_selected_name = '';
 	generated_ids.length = 0;
 	unique_ids.length = 0;
 	fetched_ids.length = 0;
 	fetched_names.length = 0;
-	$('.sprite-container').css('display', 'none');
-	$('.next-container').css('display', 'block');
 }
 
 function next_Pokemon(){
 	clear_Data();
 	new_Game_Board();
-	// console.log(random_generated_id);
-	// console.log(randomly_selected_name);
-	// console.log(generated_ids);
-	// console.log(unique_ids);
-	// console.log(fetched_ids);
-	// console.log(fetched_names);
 }
 
 

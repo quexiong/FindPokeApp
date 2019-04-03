@@ -10,7 +10,7 @@ body, html{
 
 /*Make the landing page image take up the whole screen, no white spaces, no margins or padding*/
 .landing-image{
-	opacity: .25;
+	opacity: .15;
 	/* Set rules to fill background */
   	min-height: 100%;
   	min-width: 1024px;
@@ -47,15 +47,23 @@ body, html{
 }
 
 .next-btn{
-	width: 10%;
-	height: 10%;
+	padding: 20px 20px;
+	border: 1px solid black;
+	/*border-radius: 50%;*/
+	width: 15%;
+}
+
+.img-btn{
+	width: 90%;
 }
 
 .main-game-container{
 	display: none;
+	text-align: center;
 }
 
 .sprite-container{
+	margin: 40px 20px;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
@@ -79,7 +87,15 @@ body, html{
 
 #answer{
 	text-transform: uppercase;
-	color: red;
+	/*color: red;*/
+}
+
+.stats{
+	margin: 20px 20px 20px 20px;
+}
+
+.next-instructions{
+	margin: 20px 20px 20px 20px;
 }
 
 /*Media Queries*/
@@ -88,4 +104,14 @@ body, html{
     left: 50%;
     margin-left: -512px;   /* 50% */
   }
+}
+
+@media screen and (max-width: 400px){
+	.next-btn{
+		width: 30%;
+	}
+
+	.start-btn{
+		width: 40%;
+	}
 }
