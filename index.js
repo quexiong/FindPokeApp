@@ -1,23 +1,23 @@
 'use strict';
 
-// FOR REFERENCE: http://www.pokeapi-how.appspot.com/page1
-
+// Constant declarations
 const URL = 'https://pokeapi.co/api/v2/pokemon/';
 const min = 1;
 const max = 721;
 
+// Changeable variables
 let score = 0;
 let startTime = 0;
 let endTime = 0;
 let time = 0;
 let totalTime = 0;
-
+let skipped = 0;
 let random_generated_id; // generate a random number from 1-721, assign it to this variable
 let generated_ids = []; // create an empty array, we will store the pokemons that we encountered already in this array, we have to try to prevent duplicates somehow
 let unique_ids = [];
 let fetched_ids = []; // store the ids of fetched data, i may not actually need to use this
 let fetched_names = []; // store the names of fetched data
-let randomly_selected_name; // randomly select 1 index/id/name from array of fetched pokemon 
+let randomly_selected_name = ''; // randomly select 1 index/id/name from array of fetched pokemon 
 let random_name_temp = '';
 
 function startTimer(){
@@ -34,12 +34,35 @@ function endTimer(){
 	console.log('total time: ' + totalTime + ' seconds');
 }
 
+// Function for API call
+function fetch_Pokemon_Data(array, url){
+	for(let i = 0; i < array.length; i ++){
+		let final_Url = url + array[i];
+		$.getJSON(final_Url, function(data){
+			let id = data.id;
+			let name = data.name;
+			fetched_ids.push(id);
+			fetched_names.push(name);
+			let sprite_url = data.sprites.front_default;
+			$('.sprite-container').append(populate_Game_Board(sprite_url, name, id));
+		}).done(function(){
+			select_Random_Name(fetched_names);
+		});
+	};
+	$(document).ajaxStop(function(){
+		$('.answer-container').empty();
+		display_Pokemon_Name(randomly_selected_name);
+		console.log('i ran');
+	})
+}
+
+// Button/Event handlers
 function start_Game(){
 	$('.start-btn').on('click', function(event){
 		event.preventDefault();
+		new_Game_Board();
 		$('.content-container').css('display', 'none');
 		$('.main-game-container').css('display', 'block');
- 		select_Random_Name(fetched_names);
  		startTimer();
 	});
 }
@@ -47,11 +70,30 @@ function start_Game(){
 function next_Button(){
 	$('.next-btn').on('click', function(event){
 		event.preventDefault();
+		clear_Data();
+		new_Game_Board();
 		$('.next-container').css('display', 'none');
 		$('.sprite-container').css('display', 'block');
- 		select_Random_Name(fetched_names);
+		$('.control-container').css('display', 'block');
  		startTimer();
 	});
+}
+
+// If skip button is clicked, then reload a new game board, do not increment question count.
+function skip_Button(){
+	$('#skip-btn').on('click', function(event){
+		event.preventDefault();
+		skipped ++;
+		console.log(skipped);
+		clear_Data();
+		new_Game_Board();
+ 		startTimer();
+	});
+}
+
+function calculate_Skip_Penalty(number){
+	let penalty = number * (-5);
+	return penalty;
 }
 
 function generate_Random_Number(min, max){
@@ -62,7 +104,6 @@ function generate_Random_Number(min, max){
 function select_Random_Name(array){
 	randomly_selected_name = array[Math.floor(Math.random() * array.length)];
 	random_name_temp = randomly_selected_name;
-	$('.answer-container').append(append_Pokemon_Name(randomly_selected_name));
 }
 
 function populate_ID_Array(){
@@ -75,18 +116,8 @@ function remove_Duplicates(array){
 	unique_ids = [...new Set(array)];
 }
 
-function fetch_Pokemon_Data(array, url){
-	for(let i = 0; i < array.length; i ++){
-		let final_Url = url + array[i];
-		$.getJSON(final_Url, function(data){
-			let id = data.id;
-			let name = data.name;
-			fetched_ids.push(id);
-			fetched_names.push(name);
-			let sprite_url = data.sprites.front_default;
-			$('.sprite-container').append(populate_Game_Board(sprite_url, name, id));
-		});
-	};
+function display_Pokemon_Name(name){
+	$('.answer-container').append(append_Pokemon_Name(name));
 }
 
 function populate_Game_Board(image_Url, name, id){
@@ -113,6 +144,7 @@ function check_User_Answer(guess, name){
 		console.log(score);
 		next_Pokemon();
 		endTimer();
+		$('.control-container').css('display', 'none');
 		show_Stats();
 	}
 	else{
@@ -134,10 +166,8 @@ function clear_Data(){
 
 function next_Pokemon(){
 	clear_Data();
-	new_Game_Board();
+	// new_Game_Board();
 }
-
-
 
 function new_Game_Board(){
 	generate_Random_Number(min, max);
@@ -147,9 +177,9 @@ function new_Game_Board(){
 }
 
 // Make the API call and populate the board when page loads, remove the need to wait for API call to finish
-$(document).ready(function(){
-	new_Game_Board();
-})
+// $(document).ready(function(){
+// 	new_Game_Board();
+// })
 
 // Add event listener to the future buttons
 $(document).on('click', '.image-btn', function(e){
@@ -160,6 +190,7 @@ $(document).on('click', '.image-btn', function(e){
 function start_New_Game(){
 	start_Game();
 	next_Button();
+	skip_Button();
 }
 
 $(start_New_Game);
