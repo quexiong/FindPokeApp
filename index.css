@@ -98,6 +98,20 @@ body, html{
 	margin: 20px 20px 20px 20px;
 }
 
+.row{
+	margin: auto;
+	width: 60%;
+	text-align: center;
+}
+
+.control-btn-container{
+	display: inline;
+}
+
+#skip-btn, #restart-btn{
+	width: 25%; 
+}
+
 /*Media Queries*/
 @media screen and (max-width: 1024px){
   .landing-image {
