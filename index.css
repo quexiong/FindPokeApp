@@ -23,7 +23,7 @@ body, html{
   	left: 0;
 }
 
-.content-container{
+.landing-container{
 	display: block;
 	position: absolute;
 	text-align: center;
@@ -62,10 +62,11 @@ body, html{
 }
 
 .sprite-container{
-	margin: 40px 20px;
+	margin: 30px 10px;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
+	text-align: center;
 }
 
 .next-container{
@@ -86,7 +87,6 @@ body, html{
 
 #answer{
 	text-transform: uppercase;
-	/*color: red;*/
 }
 
 .stats{
@@ -108,7 +108,8 @@ body, html{
 }
 
 #skip-btn, #restart-btn{
-	width: 25%; 
+	width: 25%;
+	margin: 20px 20px;
 }
 
 /*Media Queries*/

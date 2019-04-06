@@ -52,7 +52,6 @@ function fetch_Pokemon_Data(array, url){
 	$(document).ajaxStop(function(){
 		$('.answer-container').empty();
 		display_Pokemon_Name(randomly_selected_name);
-		console.log('i ran');
 	})
 }
 
@@ -61,7 +60,7 @@ function start_Game(){
 	$('.start-btn').on('click', function(event){
 		event.preventDefault();
 		new_Game_Board();
-		$('.content-container').css('display', 'none');
+		$('.landing-container').css('display', 'none');
 		$('.main-game-container').css('display', 'block');
  		startTimer();
 	});
@@ -91,6 +90,14 @@ function skip_Button(){
 	});
 }
 
+function restart_Button(){
+	$('#restart-btn').on('click', function(event){
+		event.preventDefault();
+		location.reload();
+	});
+}
+
+// unfinished function - need to add penalty to endgame
 function calculate_Skip_Penalty(number){
 	let penalty = number * (-5);
 	return penalty;
@@ -107,7 +114,7 @@ function select_Random_Name(array){
 }
 
 function populate_ID_Array(){
-	for(let i = 0; i < 150; i ++){
+	for(let i = 0; i < 120; i ++){
 		generate_Random_Number(min, max);
 	};
 }
@@ -166,7 +173,6 @@ function clear_Data(){
 
 function next_Pokemon(){
 	clear_Data();
-	// new_Game_Board();
 }
 
 function new_Game_Board(){
@@ -191,6 +197,7 @@ function start_New_Game(){
 	start_Game();
 	next_Button();
 	skip_Button();
+	restart_Button();
 }
 
 $(start_New_Game);
