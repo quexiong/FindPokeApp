@@ -7,31 +7,34 @@ const max = 721;
 
 // Changeable variables
 let score = 0;
-let startTime = 0;
-let endTime = 0;
+let start_Time = 0;
+let end_Time = 0;
 let time = 0;
-let totalTime = 0;
+let total_Time = 0;
 let skipped = 0;
-let random_generated_id; // generate a random number from 1-721, assign it to this variable
-let generated_ids = []; // create an empty array, we will store the pokemons that we encountered already in this array, we have to try to prevent duplicates somehow
-let unique_ids = [];
-let fetched_ids = []; // store the ids of fetched data, i may not actually need to use this
-let fetched_names = []; // store the names of fetched data
-let randomly_selected_name = ''; // randomly select 1 index/id/name from array of fetched pokemon 
-let random_name_temp = '';
+let wrong_Guess = 0;
+let random_Generated_Id; // generate a random number from 1-721, assign it to this variable
+let generated_Ids = []; // create an empty array, we will store the pokemons that we encountered already in this array, we have to try to prevent duplicates somehow
+let unique_Ids = [];
+let fetched_Ids = []; // store the ids of fetched data, i may not actually need to use this
+let fetched_Names = []; // store the names of fetched data
+let randomly_Selected_Name = ''; // randomly select 1 index/id/name from array of fetched pokemon 
+let random_Name_Temp = '';
+let results = {};
 
 function startTimer(){
-	startTime = new Date();
+	start_Time = new Date();
 }
 
 function endTimer(){
-	endTime = new Date();
-	let difference = endTime - startTime;
+	end_Time = new Date();
+	let difference = end_Time - start_Time;
 	difference /= 1000;
 	time = Math.round(difference);
-	totalTime += time;
-	console.log(time + ' seconds');
-	console.log('total time: ' + totalTime + ' seconds');
+	total_Time += time;
+	// console.log(time + ' seconds');
+	// console.log('total time: ' + total_Time + ' seconds');
+
 }
 
 // Function for API call
@@ -41,17 +44,18 @@ function fetch_Pokemon_Data(array, url){
 		$.getJSON(final_Url, function(data){
 			let id = data.id;
 			let name = data.name;
-			fetched_ids.push(id);
-			fetched_names.push(name);
-			let sprite_url = data.sprites.front_default;
-			$('.sprite-container').append(populate_Game_Board(sprite_url, name, id));
+			fetched_Ids.push(id);
+			fetched_Names.push(name);
+			let sprite_Url = data.sprites.front_default;
+			$('.sprite-container').append(populate_Game_Board(sprite_Url, name, id));
 		}).done(function(){
-			select_Random_Name(fetched_names);
+			select_Random_Name(fetched_Names);
 		});
 	};
 	$(document).ajaxStop(function(){
 		$('.answer-container').empty();
-		display_Pokemon_Name(randomly_selected_name);
+		display_Pokemon_Name(randomly_Selected_Name);
+		startTimer();
 	})
 }
 
@@ -62,7 +66,6 @@ function start_Game(){
 		new_Game_Board();
 		$('.landing-container').css('display', 'none');
 		$('.main-game-container').css('display', 'block');
- 		startTimer();
 	});
 }
 
@@ -74,7 +77,6 @@ function next_Button(){
 		$('.next-container').css('display', 'none');
 		$('.sprite-container').css('display', 'block');
 		$('.control-container').css('display', 'block');
- 		startTimer();
 	});
 }
 
@@ -83,10 +85,8 @@ function skip_Button(){
 	$('#skip-btn').on('click', function(event){
 		event.preventDefault();
 		skipped ++;
-		console.log(skipped);
 		clear_Data();
 		new_Game_Board();
- 		startTimer();
 	});
 }
 
@@ -104,13 +104,13 @@ function calculate_Skip_Penalty(number){
 }
 
 function generate_Random_Number(min, max){
-	random_generated_id = Math.floor(Math.random() * (max-min) + min);
-	generated_ids.push(random_generated_id);
+	random_Generated_Id = Math.floor(Math.random() * (max-min) + min);
+	generated_Ids.push(random_Generated_Id);
 }
 
 function select_Random_Name(array){
-	randomly_selected_name = array[Math.floor(Math.random() * array.length)];
-	random_name_temp = randomly_selected_name;
+	randomly_Selected_Name = array[Math.floor(Math.random() * array.length)];
+	random_Name_Temp = randomly_Selected_Name;
 }
 
 function populate_ID_Array(){
@@ -120,7 +120,11 @@ function populate_ID_Array(){
 }
 
 function remove_Duplicates(array){
-	unique_ids = [...new Set(array)];
+	unique_Ids = [...new Set(array)];
+}
+
+function populate_Object(name, time){
+	return results[name] = time;
 }
 
 function display_Pokemon_Name(name){
@@ -136,7 +140,15 @@ function append_Pokemon_Name(name){
 }
 
 function append_Stats(){
-	return '<h3>It took you ' + time + ' seconds to find that Pokémon.</h3>' + '<br> <h3> So far you have found ' + score + ' Pokémon in ' + totalTime + ' seconds.</h3>'
+	return '<h3>It took you ' + time + ' seconds to find that Pokémon.</h3>' + '<br> <h3> So far you have found ' + score + ' Pokémon in ' + total_Time + ' seconds.</h3>'
+}
+
+function append_Final_Stats(){
+	return '<h3>You needed ' + total_Time + ' seconds to find 10 Pokémon.</h3>'
+}
+
+function calculate_Points(){
+	
 }
 
 function show_Stats(){
@@ -145,17 +157,34 @@ function show_Stats(){
 	$('.next-container').css('display', 'block');
 }
 
+function show_Final_Stats(){
+	$('#skip-btn').css('display', 'none');
+	$('.sprite-container').css('display', 'none');
+	$('.answer-container').append(append_Final_Stats());
+}
+
 function check_User_Answer(guess, name){
 	if(guess == name){
 		score++;
-		console.log(score);
-		next_Pokemon();
-		endTimer();
-		$('.control-container').css('display', 'none');
-		show_Stats();
+		if(score == 10){
+			clear_Data();
+			show_Final_Stats();
+			console.log('game finished');
+		}
+		else{
+			endTimer();
+			populate_Object(randomly_Selected_Name, time);
+			// console.log(random_Name_Temp);
+			// console.log(time);
+			// console.log(results);
+			clear_Data();
+			$('.control-container').css('display', 'none');
+			show_Stats();
+		}
 	}
 	else{
 		alert('Wrong Pokemon!');
+		wrong_Guess ++;
 	}
 }
 
@@ -163,23 +192,19 @@ function clear_Data(){
 	$('.sprite-container').empty();
 	$('.answer-container').empty();
 	$('.stats').empty();
-	random_generated_id = '';
-	randomly_selected_name = '';
-	generated_ids.length = 0;
-	unique_ids.length = 0;
-	fetched_ids.length = 0;
-	fetched_names.length = 0;
-}
-
-function next_Pokemon(){
-	clear_Data();
+	random_Generated_Id = '';
+	randomly_Selected_Name = '';
+	generated_Ids.length = 0;
+	unique_Ids.length = 0;
+	fetched_Ids.length = 0;
+	fetched_Names.length = 0;
 }
 
 function new_Game_Board(){
 	generate_Random_Number(min, max);
 	populate_ID_Array();
-	remove_Duplicates(generated_ids);
-	fetch_Pokemon_Data(unique_ids, URL);
+	remove_Duplicates(generated_Ids);
+	fetch_Pokemon_Data(unique_Ids, URL);
 }
 
 // Make the API call and populate the board when page loads, remove the need to wait for API call to finish
@@ -190,7 +215,7 @@ function new_Game_Board(){
 // Add event listener to the future buttons
 $(document).on('click', '.image-btn', function(e){
 	let guess = $(this).val();
-	check_User_Answer(guess, randomly_selected_name);
+	check_User_Answer(guess, randomly_Selected_Name);
 })
 
 function start_New_Game(){
