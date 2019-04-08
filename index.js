@@ -147,8 +147,10 @@ function append_Final_Stats(){
 	return '<h3>You needed ' + total_Time + ' seconds to find 10 Pokémon.</h3>'
 }
 
-function calculate_Points(){
-	
+function calculate_Points(object){
+	let total_Points = 0;
+	let values = Object.values(object);
+	for()
 }
 
 function show_Stats(){
