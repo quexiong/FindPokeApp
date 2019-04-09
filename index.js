@@ -150,7 +150,6 @@ function append_Final_Stats(){
 function calculate_Points(object){
 	let total_Points = 0;
 	let values = Object.values(object);
-	for()
 }
 
 function show_Stats(){
