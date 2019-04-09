@@ -3,7 +3,7 @@
 // Constant declarations
 const URL = 'https://pokeapi.co/api/v2/pokemon/';
 const min = 1;
-const max = 721;
+const max = 493;
 
 // Changeable variables
 let score = 0;
