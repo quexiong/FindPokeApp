@@ -34,7 +34,6 @@ function endTimer(){
 	total_Time += time;
 	// console.log(time + ' seconds');
 	// console.log('total time: ' + total_Time + ' seconds');
-
 }
 
 // Function for API call
@@ -99,7 +98,7 @@ function restart_Button(){
 
 // unfinished function - need to add penalty to endgame
 function calculate_Skip_Penalty(number){
-	let penalty = number * (-5);
+	let penalty = number * (-10);
 	return penalty;
 }
 
@@ -144,12 +143,37 @@ function append_Stats(){
 }
 
 function append_Final_Stats(){
-	return '<h3>You needed ' + total_Time + ' seconds to find 10 Pokémon.</h3>'
+	return '<h3>You needed ' + total_Time + ' seconds to find 10 Pokémon.</h3>' + '<br> <h3> Your score is ' + calculate_Points(results, skipped);
 }
 
-function calculate_Points(object){
+function calculate_Points(object, number){
 	let total_Points = 0;
 	let values = Object.values(object);
+	console.log(values);
+	for (let i = 0; i < values.length; i ++){
+		if(values[i] <= 5){
+			total_Points += 100;
+		}
+		if(values[i] > 5 && values[i] <= 10){
+			total_Points += 50;
+		}
+		if(values[i] > 10 && values[i] <= 15){
+			total_Points += 25;
+		}
+		if(values[i] > 15){
+			total_Points += 10;
+		}
+	}
+
+	if(number == 0){
+		total_Points += 100;
+	}
+	else{
+		let negative_Points = calculate_Skip_Penalty(number);
+		total_Points += negative_Points;
+	}
+
+	return total_Points;
 }
 
 function show_Stats(){
@@ -170,7 +194,6 @@ function check_User_Answer(guess, name){
 		if(score == 10){
 			clear_Data();
 			show_Final_Stats();
-			console.log('game finished');
 		}
 		else{
 			endTimer();
