@@ -32,8 +32,6 @@ function endTimer(){
 	difference /= 1000;
 	time = Math.round(difference);
 	total_Time += time;
-	// console.log(time + ' seconds');
-	// console.log('total time: ' + total_Time + ' seconds');
 }
 
 // Function for API call
@@ -113,7 +111,7 @@ function select_Random_Name(array){
 }
 
 function populate_ID_Array(){
-	for(let i = 0; i < 120; i ++){
+	for(let i = 0; i < 20; i ++){
 		generate_Random_Number(min, max);
 	};
 }
@@ -139,7 +137,7 @@ function append_Pokemon_Name(name){
 }
 
 function append_Stats(){
-	return '<h3>It took you ' + time + ' seconds to find that Pokémon.</h3>' + '<br> <h3> So far you have found ' + score + ' Pokémon in ' + total_Time + ' seconds.</h3>'
+	return '<h3>It took you ' + time + ' seconds to find that Pokémon.</h3>'
 }
 
 function append_Final_Stats(){
@@ -149,7 +147,6 @@ function append_Final_Stats(){
 function calculate_Points(object, number){
 	let total_Points = 0;
 	let values = Object.values(object);
-	console.log(values);
 	for (let i = 0; i < values.length; i ++){
 		if(values[i] <= 5){
 			total_Points += 100;
@@ -164,7 +161,6 @@ function calculate_Points(object, number){
 			total_Points += 10;
 		}
 	}
-
 	if(number == 0){
 		total_Points += 100;
 	}
@@ -172,7 +168,6 @@ function calculate_Points(object, number){
 		let negative_Points = calculate_Skip_Penalty(number);
 		total_Points += negative_Points;
 	}
-
 	return total_Points;
 }
 
@@ -191,16 +186,16 @@ function show_Final_Stats(){
 function check_User_Answer(guess, name){
 	if(guess == name){
 		score++;
-		if(score == 10){
+		if(score == 3){
+			endTimer();
+			populate_Object(randomly_Selected_Name, time);
 			clear_Data();
 			show_Final_Stats();
+			console.log(results);
 		}
 		else{
 			endTimer();
 			populate_Object(randomly_Selected_Name, time);
-			// console.log(random_Name_Temp);
-			// console.log(time);
-			// console.log(results);
 			clear_Data();
 			$('.control-container').css('display', 'none');
 			show_Stats();
@@ -230,11 +225,6 @@ function new_Game_Board(){
 	remove_Duplicates(generated_Ids);
 	fetch_Pokemon_Data(unique_Ids, URL);
 }
-
-// Make the API call and populate the board when page loads, remove the need to wait for API call to finish
-// $(document).ready(function(){
-// 	new_Game_Board();
-// })
 
 // Add event listener to the future buttons
 $(document).on('click', '.image-btn', function(e){
