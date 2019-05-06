@@ -35,10 +35,12 @@ body, html{
 }
 
 .landing-info{
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+	border: 2px solid black;
+    position: absolute;
+    width: 80%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .start-btn{
@@ -48,7 +50,7 @@ body, html{
 
 .next-btn{
 	padding: 20px 20px;
-	border: 1px solid black;
+	/*border: 1px solid black;*/
 	/*border-radius: 50%;*/
 	width: 15%;
 }
@@ -62,22 +64,31 @@ body, html{
 }
 
 .sprite-container{
-	margin: 30px 10px;
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	text-align: center;
+    border: 2px solid black;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    text-align: center;
+    width: 80%;
+    margin-bottom: 40px;
 }
 
 .next-container{
-	text-align: center;
-	display: none;
+    text-align: center;
+    display: none;
+    border: 2px solid black;
+    margin: auto;
+    width: 80%;
 }
 
 .header-container{
-	text-align: center;
-	margin: 10px;
-	margin-bottom: 20px;
+	border: 2px solid black;
+    width: 80%;
+    text-align: center;
+    margin: auto;
+    margin-bottom: 20px;
+    margin-top: 20px;
 }
 
 .answer-container{
