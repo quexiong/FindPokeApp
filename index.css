@@ -96,6 +96,15 @@ body, html{
 	margin-bottom: 20px
 }
 
+.final-results-container{
+	border: 2px solid black;
+	display: none;
+	margin: auto;
+    text-align: center;
+    margin-bottom: 20px;
+    width: 80%;
+}
+
 #answer{
 	text-transform: uppercase;
 }

@@ -144,6 +144,13 @@ function append_Final_Stats(){
 	return '<h3>You needed ' + total_Time + ' seconds to find 10 Pokémon.</h3>' + '<br> <h3> Your score is ' + calculate_Points(results, skipped);
 }
 
+// create an array with the list of pokemons
+// also create an array with the times
+// create a loop that displays the info to final-results-container
+function extract_Results_Object(object){
+	let final_Pokemons = Object.keys(object);
+}
+
 function calculate_Points(object, number){
 	let total_Points = 0;
 	let values = Object.values(object);
@@ -180,7 +187,8 @@ function show_Stats(){
 function show_Final_Stats(){
 	$('#skip-btn').css('display', 'none');
 	$('.sprite-container').css('display', 'none');
-	$('.answer-container').append(append_Final_Stats());
+	$('.final-results-container').append(append_Final_Stats());
+	$('.final-results-container').css('display', 'block');
 }
 
 function check_User_Answer(guess, name){
