@@ -4,8 +4,9 @@
 
 body, html{
 	height: 100%;
-	color: #403D3C;
+	color: #d8d8d8;
 	font-size: 24px;
+	background-color: #1b1b1b;
 }
 
 /*Make the landing page image take up the whole screen, no white spaces, no margins or padding*/
@@ -37,22 +38,21 @@ body, html{
 .landing-info{
 	border: 2px solid black;
     position: absolute;
-    width: 80%;
+    width: 60%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
 .start-btn{
-	width: 25%;
-	height: 25%;
+	width: 15%;
 }
 
 .next-btn{
 	padding: 20px 20px;
 	/*border: 1px solid black;*/
 	/*border-radius: 50%;*/
-	width: 15%;
+	width: 10%;
 }
 
 .img-btn{
@@ -105,11 +105,11 @@ body, html{
     width: 80%;
 }
 
-#answer{
+.answer{
 	text-transform: uppercase;
 }
 
-.stats{
+.stats, .final-stats{
 	margin: 20px 20px 20px 20px;
 }
 
@@ -119,7 +119,7 @@ body, html{
 
 .row{
 	margin: auto;
-	width: 60%;
+	width: 80%;
 	text-align: center;
 }
 
@@ -132,6 +132,10 @@ body, html{
 	margin: 20px 20px;
 }
 
+.feedback{
+	/*font-size: 14px;*/
+}
+
 /*Media Queries*/
 @media screen and (max-width: 1024px){
   .landing-image {
@@ -140,12 +144,43 @@ body, html{
   }
 }
 
-@media screen and (max-width: 400px){
+@media screen and (max-width: 420px){
 	.next-btn{
 		width: 30%;
 	}
 
 	.start-btn{
 		width: 40%;
+	}
+
+	#skip-btn, #restart-btn{
+		width: 40%
+		margin: 10px 10px;
+	}
+
+	.feedback{
+		font-size: 14px;
+	}
+
+	.stats, .final-stats{
+	margin: 10px 10px;
+	}
+}
+
+@media screen and (max-width: 320px){
+	.row{
+		width: 90%;
+	}
+
+	.feedback{
+		font-size: 12px;
+	}
+
+	h3{
+		font-size: 16px;
+	}
+
+	.sprite-container, .header-container{
+		width: 90%;
 	}
 }

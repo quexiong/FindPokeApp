@@ -21,6 +21,7 @@ let fetched_Names = []; // store the names of fetched data
 let randomly_Selected_Name = ''; // randomly select 1 index/id/name from array of fetched pokemon 
 let random_Name_Temp = '';
 let results = {};
+let points = [];
 
 function startTimer(){
 	start_Time = new Date();
@@ -94,7 +95,6 @@ function restart_Button(){
 	});
 }
 
-// unfinished function - need to add penalty to endgame
 function calculate_Skip_Penalty(number){
 	let penalty = number * (-10);
 	return penalty;
@@ -133,22 +133,33 @@ function populate_Game_Board(image_Url, name, id){
 }
 
 function append_Pokemon_Name(name){
-	return '<h3>Find: <span id="answer">' + name + '</span></h3>'
+	return '<h3>Find: <span class="answer">' + name + '</span></h3>'
 }
 
 function append_Stats(){
-	return '<h3>It took you ' + time + ' seconds to find that Pokémon.</h3>'
+	return '<h3>You found that Pokémon in ' + time + ' seconds.</h3>'
 }
 
 function append_Final_Stats(){
-	return '<h3>You needed ' + total_Time + ' seconds to find 10 Pokémon.</h3>' + '<br> <h3> Your score is ' + calculate_Points(results, skipped);
+	return '<div class="stats">Total Score = ' + calculate_Points(results, skipped) + ' points</div';
 }
 
-// create an array with the list of pokemons
-// also create an array with the times
 // create a loop that displays the info to final-results-container
-function extract_Results_Object(object){
+function extract_Results_Object(object, array){
+	// Object.keys(object).forEach(function(key) {
+	// 	let entry = `${key} was found in ${object[key]} seconds`;
+	// 		// $('.final-results-container').append('<div>' + entry + ' = ' + '</div>');
+	// });
+
 	let final_Pokemons = Object.keys(object);
+	let final_Times = Object.values(object)
+	console.log(final_Pokemons);
+	console.log(final_Times);
+
+	for (let i = 0; i < final_Pokemons.length; i ++){
+		$('.final-stats').append('<div class="feedback"><span class="answer">' + final_Pokemons[i] + '</span> found in ' + final_Times[i] + ' seconds = ' + array[i] + ' points</div>');
+	}
+	$('.final-stats').append('<div class="feedback"> You skipped ' + skipped + ' Pokémon(s) = ' + array[array.length - 1] + ' points</div>');
 }
 
 function calculate_Points(object, number){
@@ -157,23 +168,28 @@ function calculate_Points(object, number){
 	for (let i = 0; i < values.length; i ++){
 		if(values[i] <= 5){
 			total_Points += 100;
+			points.push(100);
 		}
 		if(values[i] > 5 && values[i] <= 10){
 			total_Points += 50;
+			points.push(50);
 		}
 		if(values[i] > 10 && values[i] <= 15){
 			total_Points += 25;
+			points.push(25);
 		}
 		if(values[i] > 15){
 			total_Points += 10;
+			points.push(10);
 		}
 	}
-	if(number == 0){
-		total_Points += 100;
-	}
-	else{
+	if(number > 0){
 		let negative_Points = calculate_Skip_Penalty(number);
 		total_Points += negative_Points;
+		points.push(negative_Points);
+	}
+	else{
+		points.push(0);
 	}
 	return total_Points;
 }
@@ -185,8 +201,11 @@ function show_Stats(){
 }
 
 function show_Final_Stats(){
+	
 	$('#skip-btn').css('display', 'none');
 	$('.sprite-container').css('display', 'none');
+	calculate_Points(results, skipped)
+	extract_Results_Object(results, points);
 	$('.final-results-container').append(append_Final_Stats());
 	$('.final-results-container').css('display', 'block');
 }
@@ -200,6 +219,7 @@ function check_User_Answer(guess, name){
 			clear_Data();
 			show_Final_Stats();
 			console.log(results);
+			console.log(points);
 		}
 		else{
 			endTimer();
