@@ -111,7 +111,7 @@ function select_Random_Name(array){
 }
 
 function populate_ID_Array(){
-	for(let i = 0; i < 20; i ++){
+	for(let i = 0; i < 80; i ++){
 		generate_Random_Number(min, max);
 	};
 }
@@ -141,7 +141,7 @@ function append_Stats(){
 }
 
 function append_Final_Stats(){
-	return '<div class="stats">Total Score = ' + calculate_Points(results, skipped) + ' points</div';
+	return '<br><div class="stats"><h4>Total Score = ' + calculate_Points(results, skipped) + ' points</h4></div';
 }
 
 // create a loop that displays the info to final-results-container
@@ -213,7 +213,7 @@ function show_Final_Stats(){
 function check_User_Answer(guess, name){
 	if(guess == name){
 		score++;
-		if(score == 3){
+		if(score == 10){
 			endTimer();
 			populate_Object(randomly_Selected_Name, time);
 			clear_Data();
