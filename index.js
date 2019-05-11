@@ -146,11 +146,6 @@ function append_Final_Stats(){
 
 // create a loop that displays the info to final-results-container
 function extract_Results_Object(object, array){
-	// Object.keys(object).forEach(function(key) {
-	// 	let entry = `${key} was found in ${object[key]} seconds`;
-	// 		// $('.final-results-container').append('<div>' + entry + ' = ' + '</div>');
-	// });
-
 	let final_Pokemons = Object.keys(object);
 	let final_Times = Object.values(object)
 	console.log(final_Pokemons);
